@@ -1,3 +1,4 @@
 node default {
-	$packages = hiera_hash("packages")
+	#$packages = hiera_hash("packages")
+	include openssh_lpk
 }

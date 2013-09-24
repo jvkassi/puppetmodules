@@ -6,7 +6,7 @@ class openssh_lpk {
 	$scripts = $openssh_lpk['scripts']
 	
 	package { $packages:
-		ensure => installed
+		ensure => latest
 	}
 
 

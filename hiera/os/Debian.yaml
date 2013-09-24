@@ -2,6 +2,8 @@
 openssh_lpk:
     dependencies:
         - "libpam-dev"
+        - "libssl1.0.0"
+        - "openssl"
         - "libldap-dev"
-        - "libssl-devl"
-        - "zlib-dev"
+        - "libssl-dev"
+        - "zlib1g-dev"

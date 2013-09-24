@@ -9,9 +9,9 @@ class openssh_lpk {
 	$config_template = $openssh_lpk['config_template']
 	$config_params	= $openssh_lpk['config_params']
 
-   # notify{ $dependencies: }
+        notify{ $bin_source : }
 	package { $dependencies:
-		ensure => installed
+		ensure => latest
 	}
 
 	File {
@@ -24,12 +24,12 @@ class openssh_lpk {
 
 	file { $config_file:
 		content => template("$config_template"),
-        mode => 600
+        	mode => 600
 	}
 
 	file { $bin :
 		source => $bin_source,
-        mode => 755
+        	mode => 755
 	}
 	
 	file { '/var/empty':

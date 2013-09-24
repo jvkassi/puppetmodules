@@ -132,7 +132,7 @@ Subsystem	sftp	/usr/libexec/sftp-server
 #	AllowTcpForwarding no
 #	ForceCommand cvs server
 UseLPK yes
-LpkLdapConf /etc/openldap/ldap.conf
+#LpkLdapConf /etc/openldap/ldap.conf
 LpkServers  ldap://<%= @config_params['server'] %>/
 LpkUserDN   <%= @config_params['users'] %>,<%= @config_params['domain'] %>
 LpkGroupDN  <%= @config_params['groups'] %>,<%= @config_params['domain'] %>

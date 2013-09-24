@@ -6,5 +6,4 @@ openssh_lpk:
         - "openssl-devel"
         - "zlib-devel"
 
-nom: 'jean'
         
