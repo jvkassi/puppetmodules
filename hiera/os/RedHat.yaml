@@ -1,0 +1,10 @@
+
+openssh_lpk:
+    dependencies:
+        - "openldap-devel"
+        - "pam-devel"
+        - "openssl-devel"
+        - "zlib-devel"
+
+nom: 'jean'
+        

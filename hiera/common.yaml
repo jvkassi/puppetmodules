@@ -1,0 +1,19 @@
+---
+
+openssh_lpk:
+    dependencies:
+        - "openssh-server"
+    bin: /usr/sbin/sshd
+    bin_source: "puppet:///modules/openssh_lpk/sshd"
+    config_file: /etc/ssh/sshd_config
+    config_template: openssh_lpk/sshd_config.erb
+    config_params:
+        domain: dc=smileci,dc=lan
+        server: ldap1.smilci.lan
+        users: ou=people
+        groups: ou=groups
+        admin: cn=ssh
+        adminpw: smileci
+
+module:
+    - "openssh_lpk"

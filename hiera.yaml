@@ -1,8 +1,10 @@
 ---
+
 :backends:
-  - yaml
+    - yaml
 :yaml:
-  :datadir: /etc/puppet/hieradata
+    :datadir: '/etc/puppet/hiera'
 :hierarchy:
-  - "os/%{operatingsystem}"
-  - common
+    - "os/%{osfamily}"
+    - common
+:merge_behavior: deeper
