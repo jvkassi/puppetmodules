@@ -1,5 +1,5 @@
 
-openssh_lpk:
+openssh_ldap:
     dependencies:
         - "libpam-dev"
         - "libssl1.0.0"
@@ -7,3 +7,12 @@ openssh_lpk:
         - "libldap-dev"
         - "libssl-dev"
         - "zlib1g-dev"
+    service: 'ssh'
+
+pam_ldap:
+    dependencies:
+        - "libnss-ldapd"
+        - 'libpam-ldapd'
+    #conf_files:
+    config_file: '/etc/nslcd.conf'
+    config_template: 'pam_ldap/nslcd.conf.erb'

@@ -1,9 +1,17 @@
 
-openssh_lpk:
+openssh_ldap:
     dependencies:
         - "openldap-devel"
         - "pam-devel"
         - "openssl-devel"
         - "zlib-devel"
+    service: 'sshd'
 
-        
+pam_ldap:
+    dependencies:
+        - 'openssh-ldap'
+        - 'nss-pam-ldapd'
+    #conf_files:
+    config_file: '/etc/pam_ldap.conf'
+    config_template: 'pam_ldap/pam_ldap.conf.erb'
+
