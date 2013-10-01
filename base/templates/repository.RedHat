@@ -1,0 +1,5 @@
+[<%= @name %>]
+enabled=1
+name=<%= @name %>
+mirrorlist=<%= @release %>?release=$releasever&arch=$basearch&repo=<%= @sections %>
+gpgcheck=0

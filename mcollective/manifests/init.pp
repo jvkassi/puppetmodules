@@ -1,0 +1,7 @@
+# class mcollective
+#
+
+class mcollective {
+
+
+}

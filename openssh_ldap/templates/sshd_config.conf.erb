@@ -1,0 +1,38 @@
+#	$OpenBSD: sshd_config,v 1.81 2009/10/08 14:03:41 markus Exp $
+
+# This is the sshd server system-wide configuration file.  See
+# sshd_config(5) for more information.
+
+# This sshd was compiled with PATH=/usr/bin:/bin:/usr/sbin:/sbin
+
+# The strategy used for options in the default sshd_config shipped with
+# OpenSSH is to specify options with their default value where
+# possible, but leave them commented.  Uncommented options change a
+# default value.
+
+
+# Authentication:
+
+#LoginGraceTime 2m
+PermitRootLogin <%= @settings['root_login'] %>
+PasswordAuthentication  <%= @settings['password_auth'] %>
+#StrictModes yes
+#MaxAuthTries 6
+#MaxSessions 10
+
+RSAAuthentication <%= @settings['rsa_auth'] %>
+
+UseLPK yes
+#LpkLdapConf /etc/openldap/ldap.conf
+LpkServers  ldap://<%= @settings['server'] %>/
+LpkUserDN   <%= @settings['users'] %>,<%= @settings['domain'] %>
+LpkGroupDN  <%= @settings['groups'] %>,<%= @settings['domain'] %>
+LpkBindDN <%= @settings['admin'] %>,<%= @settings['domain'] %>
+LpkBindPw <%= @settings['adminpw'] %>
+#LpkServerGroup <whatever OU your "Manager" user is sitting under>
+#LpkFilter (hostAccess=master.phear.org)
+LpkForceTLS no
+LpkSearchTimelimit 3
+LpkBindTimelimit 3
+LpkPubKeyAttr sshPublicKey
+

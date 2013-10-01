@@ -1,0 +1,79 @@
+
+connector = activemq
+direct_addressing = 1
+
+# RabbitMq connector settings:
+#plugin.rabbitmq.vhost = /mcollective
+#plugin.rabbitmq.pool.size = 1
+#plugin.rabbitmq.pool.1.host = localhost
+#plugin.rabbitmq.pool.1.port = 55672
+#plugin.rabbitmq.pool.1.user = mcollective
+#plugin.rabbitmq.pool.1.password = eeVah9pahNgeefaikietohMa
+# ActiveMQ connector settings:
+plugin.activemq.pool.size = 1
+plugin.activemq.pool.1.host = localhost
+plugin.activemq.pool.1.port = 61613
+plugin.activemq.pool.1.user = mcollective
+plugin.activemq.pool.1.password = eeVah9pahNgeefaikietohMa
+
+# ... etc., similar to activemq settings
+
+# Security plugin settings (required):
+# -----------------------------------
+
+#securityprovider = ssl
+
+# SSL plugin settings:
+#plugin.ssl_server_public = /Users/nick/mcollective.d/credentials/certs/mcollective-servers.pem
+#plugin.ssl_client_private = /Users/nick/mcollective.d/credentials/private_keys/nick-mco.pem
+#plugin.ssl_client_public = /Users/nick/mcollective.d/credentials/certs/nick-mco.pem
+
+# PSK plugin settings:
+plugin.psk = j9q8kx7fnuied9e
+
+# Interface settings (optional):
+# ------------------------------
+
+# Discovery settings:
+
+#default_discovery_method = mc
+# default_discovery_options = /etc/mcollective/nodes.txt
+
+# Performance settings:
+
+direct_addressing_threshold = 10
+ttl = 60
+
+# Miscellaneous settings:
+
+color = 1
+rpclimitmethod = first
+
+# Subcollectives (optional):
+# -----------------------------------
+
+collectives = mcollective,uk_collective
+main_collective = mcollective
+
+# Advanced settings and platform defaults:
+# -----------------------------------
+
+logger_type = console
+loglevel = warn
+logfile = /var/log/mcollective.log
+keeplogs = 5
+max_log_size = 2097152
+logfacility = user
+libdir = /usr/share/mcollective/plugins
+rpchelptemplate = /etc/mcollective/rpc-help.erb
+helptemplatedir = /etc/mcollective
+ssl_cipher = aes-256-cbc
+
+
+
+plugin.redis.host = localhost
+plugin.redis.port = 6379
+plugin.redis.db = 0
+default_discovery_method = redisdiscovery
+direct_addressing = yes
+
