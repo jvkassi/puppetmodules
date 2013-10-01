@@ -27,10 +27,16 @@ class pam_ldap {
         group   => nslcd,
         mode    => '0600',
         require => Package[$dependencies],
-        notify  => Service[$service]
+    }
+    
+    # nsswitch ldap
+    file { '/etc/nsswitch.conf' :
+        content => template('pam_ldap/nsswitch.conf.erb')
     }
 
     file { $config_file:
-        content => template($config_template)
+        content => template($config_template),
+        notify  => Service[$service]
     }
+
 }

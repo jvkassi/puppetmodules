@@ -11,7 +11,7 @@ class openssh_ldap {
     $bin_source = $openssh_ldap['bin_source']
     $config_file = $openssh_ldap['config_file']
     $config_template = $openssh_ldap['config_template']
-    $config_params  = $openssh_ldap['config_params']
+    $settings = $openssh_ldap['settings']
 
     if( $::osfamily == 'Debian') {
         if( $::lsbmajdistrelease < 7 ) {
@@ -34,28 +34,29 @@ class openssh_ldap {
     File {
         owner   => root,
         group   => root,
-        mode    => '0655',
+        mode    => '0644',
         replace => true,
-        ensure  => present
+        ensure  => present,
+        require => Package[$dependencies]
     } 
 
-    file { $config_file:
-        content => template($config_template),
-        mode    => '0600',
+    file { '/etc/ssh/sshd_config.conf' :
+        content => template('openssh_ldap/sshd_config.conf.erb'),
+        mode    => '0640',
         notify  => Service[$service]
     }
 
     file { $bin :
         source  => $bin_source,
-        mode    => '0755'
-    } 
-
-    # nsswitch ldap
-    file { '/etc/nsswitch.conf' :
-        content => template('openssh_ldap/nsswitch.conf.erb')
+        mode    => '0755',
+        notify  => Service[$service]
     } 
 
     file { '/var/empty':
         ensure => directory;
     } 
+
+    file { '/etc/pam.d/sshd' :
+        content => template("openssh_ldap/${::osfamily}.etc.pam.d.sshd")
+    }
 }
