@@ -1,4 +1,12 @@
 
+base:
+    repo_dir: '/etc/yum.repos.d'
+
+puppet:
+    server:
+        dependencies:
+            - 'puppet-server'
+
 openssh_ldap:
     dependencies:
         - "openldap-devel"
@@ -15,3 +23,23 @@ pam_ldap:
     config_file: '/etc/pam_ldap.conf'
     config_template: 'pam_ldap/pam_ldap.conf.erb'
 
+apache: 
+    dependencies:
+        - 'httpd'
+    config_file: '/etc/httpd/httpd.conf'
+    vhosts_dir: '/etc/httpd/conf.d'
+    settings:
+        user: 'apache'
+        group: 'apache'
+
+ldap:
+    dependencies:
+        - 'slapd'
+ntp:
+    config_file: '/etc/ntp.conf'
+    service: 'ntpd'
+
+mysql:
+    dependencies:   
+        - 'mysql'
+        - 'mysql-server'

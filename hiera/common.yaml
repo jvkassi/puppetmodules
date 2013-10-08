@@ -1,4 +1,63 @@
 ---
+basics_modules:
+        - ssh
+        - ntp
+        - puppet
+        - mcollective::agent
+        
+base:
+    root_password: 
+    admins_group: adminsys
+    dns:
+        search: smileci.lan
+        servers: 
+            - 10.100.0.220
+            - 10.100.11.15
+        repositories:
+    packages:
+        - file
+        - rsync
+        - iproute
+        - vim
+        - sudo
+        - tmux
+        - wget
+        - iotop
+        - figlet
+        - htop
+        - iptables
+
+mcollective:
+    server: foreman.smileci.lan
+    username: mcollective
+    password: mcollective
+    plugins:
+        - puppet
+        - service
+        - package
+
+# configuration ssh clientddd
+ssh:
+    settings:
+
+ntp:
+    dependencies:
+        - 'ntp'
+    config_file: '/etc/ntp.conf'
+    servers:
+        - 0.pool.ntp.org
+        - 1.pool.ntp.org
+        - 2.pool.ntp.org
+        - 3.pool.ntp.org
+
+puppet:
+    client:
+        dependencies:
+            - 'puppet'
+    settings:
+        server: foreman.smileci.lan
+        environment: production
+        run_interval: 1800
 
 openssh_ldap:
     dependencies:
@@ -6,9 +65,10 @@ openssh_ldap:
         - "openssl"
     bin: /usr/sbin/sshd
     bin_source: "puppet:///modules/openssh_ldap/%{osfamily}/%{architecture}/sshd"
-    config_file: /etc/ssh/sshd_config
-    config_template: openssh_ldap/sshd_config.erb
-    config_params:
+    settings:
+        root_login: yes
+        password_auth: yes
+        rsa_auth: 'no'
         domain: dc=smileci,dc=lan
         server: ldap1.smileci.lan
         users: ou=people
