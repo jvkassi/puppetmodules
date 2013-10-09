@@ -1,4 +1,2 @@
-node default {
-	#$packages = hiera_hash("packages")
-	include openssh_lpk
-}
+#include proftpd
+hiera_include('modules')

@@ -1,0 +1,15 @@
+#############
+# This file is maintened with Puppet
+# Do not edit it directly
+# Database administrative login by Unix domain socket
+local   all         postgres                          ident
+
+# IPv4 localhost connection
+host    all         all         127.0.0.1/32          trust
+# IPv6 localhost connection
+host    all         all         ::1/128          trust
+
+# IP address acl 
+<% @settings['acl'].each do |entry| -%>
+<%= entry %>
+<% end -%>

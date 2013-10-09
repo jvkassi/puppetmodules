@@ -1,0 +1,54 @@
+###########
+# HEADER: This file is maintained with Puppet.
+# HEADER: Do not edit it directly.
+#
+
+# Includes DSO modules
+Include /etc/proftpd/modules.conf
+
+# Set off to disable IPv6 support which is annoying on IPv4 only boxes.
+# If set on you can experience a longer connection delay in many cases.
+IdentLookups                    off
+
+ServerIdent                     on "<%= @settings['motd'] %>"
+ServerAdmin                     <%= @settings['server_admin'] %>
+ServerType                      standalone
+DeferWelcome                    on
+
+MultilineRFC2228                on
+ShowSymlinks                    on
+
+TimeoutLogin                    120
+TimeoutNoTransfer               600
+TimeoutStalled                  600
+TimeoutIdle                     <%= @settings['timeout_idle'] %>
+
+ListOptions                     "-l"
+
+SetEnv TZ CET
+
+# Use this to jail all users in their homes
+# DefaultRoot                   ~
+
+# Users require a valid shell listed in /etc/shells to login.
+# Use this directive to release that constrain.
+RequireValidShell               off
+TimesGMT off
+
+# Port 21 is the standard FTP port.
+Port                            <%= @settings['port'] %>
+
+User                            proftpd
+Group                           nogroup
+# Normally, we want files to be overwriteable.
+AllowOverwrite                  on
+
+TransferLog /var/log/proftpd/xferlog
+SystemLog   /var/log/proftpd/proftpd.log
+
+PathDenyFilter  "(\\.ftpaccess|\\.htaccess|\\.svn)$"
+
+# Config
+AuthPAM        <%= @settings['pam_authentication'] %>
+DefaultRoot    ~
+Include /etc/proftpd/sftp.d/*

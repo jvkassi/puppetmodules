@@ -1,0 +1,5 @@
+[<%= @name %>]
+enabled=1
+name=<%= @name %>
+baseurl=<%= @url %><%= params %>
+gpgcheck=0

@@ -1,0 +1,25 @@
+##############
+# This file is maintened with Puppet
+# Do not edit it directly
+
+data_directory = '/var/lib/postgresql/<%= @settings['version'] %>/main'		# use data in another directory
+hba_file = '/etc/postgresql/<%= @settings['version'] %>/main/pg_hba.conf'	# host-based authentication file
+ident_file = '/etc/postgresql/<%= @settings['version'] %>/main/pg_ident.conf'	# ident configuration file
+# If external_pid_file is not explicitly set, no extra PID file is written.
+external_pid_file = '/var/run/postgresql/<%= @settings['version'] %>-main.pid'		# write an extra PID file
+
+listen_addresses = <%= @settings['listen_addresses'] %>		# what IP address(es) to listen on;
+port = <%= @settings['port'] %>			# (change requires restart)
+max_connections = <%= @settings['max_connections'] %>			# (change requires restart)
+unix_socket_directory = '/var/run/postgresql'		# (change requires restart)
+#ssl = true				# (change requires restart)
+shared_buffers = <%= @settings['shared_buffers'] %>			# min 128kB
+log_line_prefix = '%t '			# special values:
+datestyle = 'iso, mdy'
+# These settings are initialized by initdb, but they can be changed.
+lc_messages = 'en_US.UTF-8'			# locale for system error message
+lc_monetary = 'en_US.UTF-8'			# locale for monetary formatting
+lc_numeric = 'en_US.UTF-8'			# locale for number formatting
+lc_time = 'en_US.UTF-8'				# locale for time formatting
+# default configuration for text search
+default_text_search_config = 'pg_catalog.english'
