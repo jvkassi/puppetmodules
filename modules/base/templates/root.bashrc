@@ -30,7 +30,3 @@ for file in /etc/bash.bashrc.d/* ; do
     source $file ;
 done;
 
-for FILE in $(\ls ${HOME}/.bashrc.d)
-do
-    source ${HOME}/.bashrc.d/${FILE}
-done

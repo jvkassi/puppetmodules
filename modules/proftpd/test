@@ -1,0 +1,12 @@
+#proftpd common variables
+proftpd:
+settings:
+port: 21
+# pam off or on
+pam_authentication: Off
+motd: "welcome %{::hostname} sftp server "
+server_admin: smile@smile.ci
+# users home dir
+timeout_idle: 1200
+# sftp virtual hosts
+

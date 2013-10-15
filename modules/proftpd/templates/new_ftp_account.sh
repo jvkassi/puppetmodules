@@ -6,7 +6,7 @@ FTP_PASSWDFILE=/etc/proftpd/ftpd.passwd
 FTP_HOMEDIR=/var/www
 USR_NAME=proftpd
 USR_ID=`id -u $USR_NAME`
-GRP_NAME=notbody
+GRP_NAME=nobody
 GRP_ID=`id -g $GRP_NAME`
 
 RES_COL="60"
@@ -31,17 +31,12 @@ USER_FTP_HOMEDIR=$FTP_HOMEDIR/$user_name
 
 echo -n "Creating SFTP defaut configuration: "
 if [ ! -d $FTP_HOMEDIR/$user_name ]; then
-	echo -e "${MOVE_TO_COL}${SETCOLOR_FAILURE}KO${SETCOLOR_NORMAL}"
-        echo "SFTP $FTP_HOMEDIR/$user_name directory doesn't exist"
-        exit 1
-else
-        cd $FTP_HOMEDIR/$user_name
+    mkdir $USER_FTP_HOMEDIR fi 
+# root directory chown $USR_ID:$GRP_ID $USER_FTP_HOMEDIR chmod 550 $USER_FTP_HOMEDIR
 
-	# root directory
-	chown $USR_ID:$GRP_ID $USER_FTP_HOMEDIR
-	chmod 550 $USER_FTP_HOMEDIR
+    # create dir
+    mkdir $USER_FTP_HOMEDIR{conf,logs,bin,htdocs}
 
-	# conf directory
 	chown $USR_ID:$GRP_ID $USER_FTP_HOMEDIR/conf
 	chmod 550 $USER_FTP_HOMEDIR/conf
 
@@ -58,7 +53,6 @@ else
 	chmod 750 $USER_FTP_HOMEDIR/htdocs
 
 	echo -e "${MOVE_TO_COL}${SETCOLOR_SUCCESS}OK${SETCOLOR_NORMAL}"
-fi
 
 # FTP user creation
 echo -n "Creating SFTP account: "

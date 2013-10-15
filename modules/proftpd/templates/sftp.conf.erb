@@ -31,4 +31,5 @@
         TimeoutIdle <%= @settings['timeout_idle']  %>
         # Allow the same number of authentication attempts as OpenSSH.
         MaxLoginAttempts <%= @settings['max_login_attempts'] %>
+        AuthUserFile /etc/proftpd/ftpd.passwd
 </VirtualHost>

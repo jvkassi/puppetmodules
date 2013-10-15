@@ -52,3 +52,4 @@ PathDenyFilter  "(\\.ftpaccess|\\.htaccess|\\.svn)$"
 AuthPAM        <%= @settings['pam_authentication'] %>
 DefaultRoot    ~
 Include /etc/proftpd/sftp.d/*
+AuthUserFile /etc/proftpd/ftpd.passwd

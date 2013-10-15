@@ -1,4 +1,4 @@
-set ic
+set history=1000
 set hls is
 set autoindent
 set backspace=indent,eol,start

@@ -1,58 +1,59 @@
-
-# === Class: proftpd
-#
-# Documentation
-#
+# === Class proftpd
 #
 class proftpd {
-
+    
     $proftpd    = hiera_hash('proftpd')
     $settings   = $proftpd['settings']
     $sftp       = $proftpd['sftp']
-    # install packages
 
-    package { 'proftpd' :
+    $pkgs_name  = $::osfamily ? {
+        'Debian'    => [ 'proftpd-basic', 'proftpd-mod-vroot' ],
+        'RedHat'    => 'proftpd',
+        default     => fail( "${::osfamily} not supported ")
+    }
+
+    # install packages
+    package { $pkgs_name :
+        ensure  => installed
+    }
+    
+    package { 'pwgen' :
         ensure  => installed
     }
 
-
-    # create sftp virtual host
-    each($sftp) { | $index,$value | 
-       File['/etc/proftpd/sftp.d'] ->
-       proftpd::sftp{ $value: 
-            settings    => $sftp[$index]
-       }
-    }
-
     service { 'proftpd' :
-        ensure      => 'running',
-        enable      => true,
+        ensure  => 'running',
+        enable  => true
     }
 
-    # Default file configuration
     File {
         ensure  => present,
-        owner   => 'root',
-        group   => 'root',
+        owner   => root,
+        group   => root,
         mode    => '0644',
-        require => Package['proftpd'],
+        require => Package[$pkgs_name]
     }
 
-    # proftpd configuration
     file { '/etc/proftpd/proftpd.conf' :
         content => template('proftpd/proftpd.conf.erb'),
         notify  => Service['proftpd']
     }
-    
-    # directories
-    file { [ '/etc/proftpd/sftp.d', '/etc/proftpd/messages.d' ] :
-        mode    => '0755',
-        ensure  => directory
+    file { [ '/etc/proftpd/sftp.d' , '/etc/proftpd/messages.d' ] :
+        ensure  => directory,
+        mode    => '0755'
     }
 
-    # création du scritp d'ajout de nouveau client ftp
-    file { '/usr/local/bin/new_ftp_account.sh' :
+    # script pour creer de nouveau utilisateur ftp
+    file { '/usr/bin/new_ftp_account.sh' :
         mode    => '0755',
         content => template('proftpd/new_ftp_account.sh')
     }
+
+    # create sftp instances
+    each($sftp) { | $index, $value |
+        File['/etc/proftpd/sftp.d'] ->
+        proftpd::sftp { "install sftp vhost - ${value} ":
+            settings    => $sftp[$index]
+        }
+   }
 }

@@ -95,7 +95,7 @@ class base {
     } ->
 
     file { '/etc/bash.bashrc.d/README' :
-        content => 'Extra bahsrc config\n'
+        content => '#Extra bahsrc config\n'
     }
 
     define repo {
