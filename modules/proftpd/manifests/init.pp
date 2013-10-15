@@ -1,7 +1,6 @@
 # === Class proftpd
-#
 class proftpd {
-    
+
     $proftpd    = hiera_hash('proftpd')
     $settings   = $proftpd['settings']
     $sftp       = $proftpd['sftp']
@@ -16,7 +15,7 @@ class proftpd {
     package { $pkgs_name :
         ensure  => installed
     }
-    
+
     package { 'pwgen' :
         ensure  => installed
     }

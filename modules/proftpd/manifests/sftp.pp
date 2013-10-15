@@ -1,8 +1,9 @@
-# 
+# sftp virtual host
+
 define proftpd::sftp(
         $settings
     ) {
-        
+
         $vhost_name = $settings['vhost_name']
 
         # create login motd
@@ -14,9 +15,8 @@ define proftpd::sftp(
         # config file
         file{ "/etc/proftpd/sftp.d/${vhost_name}" :
             ensure  => present,
-            content => template("proftpd/sftp.conf.erb"),
+            content => template('proftpd/sftp.conf.erb'),
             notify  => Service['proftpd']
         }
 
     }
-    
