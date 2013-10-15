@@ -34,43 +34,43 @@ class phpmyadmin {
               $config_file   = '/etc/phpmyadmin/config.inc.php'
           }
           default : {
-             fail( "${::osfamily} not supported" )
+              fail( "${::osfamily} not supported" )
           }
-     }
+      }
 
-     # install main package
-     package { $pkg_name :
+      # install main package
+      package { $pkg_name :
         ensure  => installed
-     }
+      }
 
-    # ensure web server
-    package { $web_server :
+      # ensure web server
+      package { $web_server :
         ensure  => present
-    }
+      }
 
-    service { $web_server :
+      service { $web_server :
         ensure  => running,
         enable  => true,
         require => Package[$web_server]
-    }
+      }
 
-    File {
+      File {
         ensure  => present,
         owner   => root,
         group   => root,
         mode    => '0644',
         require => Package[$pkg_name],
-    }
+      }
 
-    # database connection config
-    file { $config_file:
+      # database connection config
+      file { $config_file:
         content => template('phpmyadmin/config.inc.php.erb')
-    }
+      }
 
-    # webserver config
-    file { $httpd_config:
-         content    => template('phpmyadmin/httpd.conf.erb'),
-         notify     => Service[$web_server]
-    }
+      # webserver config
+      file { $httpd_config:
+        content    => template('phpmyadmin/httpd.conf.erb'),
+        notify     => Service[$web_server]
+      }
 
 }
