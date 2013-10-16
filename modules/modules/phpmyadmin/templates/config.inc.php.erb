@@ -1,0 +1,41 @@
+<?php
+#############################################
+# This is file is managed by puppet 
+# DO NOT EDIT IT BY HAND
+
+$cfg['blowfish_secret'] = "<%= @settings['secret'] %>"; 
+/**
+ * Server(s) configuration
+ */
+$i = 0;
+$i++;
+$cfg['Servers'][$i]['host']          = "<%= @settings['dbserver'] %>"; // MySQL hostname or IP address
+$cfg['Servers'][$i]['port']          = "<%= @settings['dbport'] %>";          // MySQL port - leave blank for default port
+$cfg['Servers'][$i]['socket']        = '';          // Path to the socket - leave blank for default socket
+$cfg['Servers'][$i]['connect_type']  = 'tcp';       // How to connect to MySQL server ('tcp' or 'socket')
+$cfg['Servers'][$i]['extension']     = 'mysqli';    // The php MySQL extension to use ('mysql' or 'mysqli')
+$cfg['Servers'][$i]['compress']      = FALSE;       // Use compressed protocol for the MySQL connection
+                                                    // (requires PHP >= 4.3.0)
+$cfg['Servers'][$i]['controluser']   = '';          // MySQL control user settings
+                                                    // (this user must have read-only
+$cfg['Servers'][$i]['controlpass']   = '';          // access to the "mysql/user"
+$cfg['Servers'][$i]['auth_type']     = "<%= @settings['auth_type'] %>";      // Authentication method (config, http or cookie based)?
+$cfg['Servers'][$i]['user']          = "<%= @settings['dbuser'] %>";          // MySQL user
+$cfg['Servers'][$i]['password']      = "<%= @settings['dbpass'] %>";          // MySQL password (only needed
+$cfg['Servers'][$i]['AllowRoot']     = <%= @settings['AllowRoot'] %>;        // whether to allow root login
+/*
+ * End of servers configuration
+ */
+
+/*
+ * Directories for saving/loading files from server
+ */
+$cfg['UploadDir'] = '/var/lib/phpMyAdmin/upload';
+$cfg['SaveDir']   = '/var/lib/phpMyAdmin/save';
+
+/*
+ * Disable the default warning that is displayed on the DB Details Structure
+ * page if any of the required Tables for the relation features is not found
+ */
+$cfg['PmaNoRelation_DisableWarning'] = TRUE;
+?>

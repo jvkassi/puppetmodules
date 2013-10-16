@@ -1,0 +1,35 @@
+# HEADER: This file is maintained with Puppet.
+# HEADER: Do not edit it directly.
+<VirtualHost <%= @settings['ipaddress'] %> >
+
+        SFTPEngine On
+        SFTPLog /var/log/proftpd/settings.log
+        
+        ServerName <%= @hostname %>
+        ServerAdmin <%= @settings['server_admin'] %>
+        # Configure the server to listen on the normal SSH2 port, port 22
+        Port <%= @settings['port'] %>
+
+        # Configure both the RSA and DSA host keys, using the same host key
+        # files that OpenSSH uses.
+        SFTPHostKey /etc/ssh/ssh_host_dsa_key
+        SFTPHostKey /etc/ssh/ssh_host_rsa_key
+ 
+        SFTPAuthMethods <%= @settings['authentication_methods'] %>
+
+        SFTPDisplayBanner /etc/proftpd/messages.d/login-<%= @settings['vhost_name'] %>.msg
+
+
+        # Configure the file used for comparing authorized public keys of users.
+        SFTPAuthorizedUserKeys <%= @settings['authorized_keys'] %>
+
+        # Enable compression
+        SFTPCompression delayed
+        
+        umask <%= @settings['umask'] %>
+
+        TimeoutIdle <%= @settings['timeout_idle']  %>
+        # Allow the same number of authentication attempts as OpenSSH.
+        MaxLoginAttempts <%= @settings['max_login_attempts'] %>
+        AuthUserFile /etc/proftpd/ftpd.passwd
+</VirtualHost>

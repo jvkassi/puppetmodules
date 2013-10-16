@@ -1,0 +1,4 @@
+phpmyadmin:
+    # web server config
+    httpd_conf: /etc/phpMyAdmin/phpMyAdmin.conf
+    web_server: httpd
