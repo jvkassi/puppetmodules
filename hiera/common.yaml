@@ -6,7 +6,7 @@ basics_modules:
         - mcollective::agent
         
 base:
-    root_password: 
+    root_password: 6d96270004515a0486bb7f76196a72b40c55a47f
     admins_group: adminsys
     dns:
         search: smileci.lan
@@ -77,12 +77,53 @@ openssh_ldap:
         adminpw: smileci
 
 pam_ldap:
-    config_params:
-        uri: ldap://
-        server: ldap1.smileci.lan
+    settings:
+        server: ldap://10.100.0.20
         domain: dc=smileci,dc=lan
-    service: nslcd
 
 
 module:
     - "openssh_lpk"
+
+phpmyadmin:
+    servers:
+        admin:
+            secret: 'uZ|9l1dPVkEYwcmL0xlNYn+wr^@c0_3wG2xDv0urqF%'
+            auth_type: cookie
+            dbuser: pdns
+            dbpass: smilecidns
+            dbname: pdns
+            dbserver: 10.100.13.21
+            dbport: 3306
+            dbtype: mysql
+            # Access list
+            #acl: 192.168.1.0/24
+            acl: All
+
+#proftpd common variables
+proftpd:
+    settings:
+        port: 21
+        # pam off or on
+        pam_authentication: Off
+        motd: "welcome %{::hostname} sftp server "
+        server_admin: smile@smile.ci
+        timeout_idle: 1200
+        enable_ftp: FALSE
+        enable_sftp: TRUE
+        user: proftpd
+        group: nobody
+        # sftp virtual hosts
+    sftp:
+        public:
+            motd: "Welcome %{::hostname} sftp server"
+            vhost_name: public
+            port: 22
+            ipaddress: 0.0.0.0
+            timeout_idle: 1200
+            authentication_methods: password publickey keyboard-interactive
+            max_login_attempts: 3
+            authorized_keys: file:~/.sftp/authorized_keys
+            umask: 066 022
+            max_clients: 100
+            server_admin: smile@smile.ci

@@ -19,31 +19,30 @@ class phpmyadmin {
               $httpd_config = '/etc/phpMyAdmin/httpd.conf'
               $httpd_symlink= '/etc/httpd/conf.d/phpMyAdmin.conf'
               $gpg          = "/etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-${::os_maj_version}"
-
               # ensure epel repo
               yumrepo { 'epel':
-                mirrorlist      => "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-${::os_maj_version}&arch=${::architecture}",
-                failovermethod  => 'priority',
-                enabled         => '1',
-                gpgcheck        => '1',
-                gpgkey          => "file://${gpg}",
-                descr           => "Extra Packages for Enterprise Linux ${::os_maj_version} - ${::architecture}"
+                    mirrorlist      => "http://mirrors.fedoraproject.org/mirrorlist?repo=epel-${::os_maj_version}&arch=${::architecture}",
+                    failovermethod  => 'priority',
+                    enabled         => '1',
+                    gpgcheck        => '1',
+                    gpgkey          => "file://${gpg}",
+                    descr           => "Extra Packages for Enterprise Linux ${::os_maj_version} - ${::architecture}"
               }
 
               # ensure key
-              file { $gpg:
-                ensure      => present,
-                owner       => 'root',
-                group       => 'root',
-                mode        => '0644',
-                content     => template("phpmyadmin/RPM-GPG-KEY-EPEL-${::os_maj_version}")
-              }
-
+              file { "${gpg}":
+    		    ensure	=> present,
+		    owner 	=> 'root',
+		    group  	=> 'root',
+		    mode   	=> '0644',
+		    content	=> template("phpmyadmin/RPM-GPG-KEY-EPEL-${::os_maj_version}")
+	      }
+               
               # import key unless already done
-              exec { 'import gpg' :
-                command     => "rpm --import ${gpg}",
-                unless      => "rpm -q gpg-pubkey-$(echo $(gpg --throw-keyids < ${gpg}) | cut --characters=11-18 | tr '[A-Z]' '[a-z]')",
-                require     => File[$gpg]
+              exec { 'import gpg' : 
+                      command => "rpm --import ${gpg}",
+		      unless => "rpm -q gpg-pubkey-$(echo $(gpg --throw-keyids < ${gpg}) | cut --characters=11-18 | tr '[A-Z]' '[a-z]')",
+    		      require => File[$gpg]
               }
           }
           'Debian' : {

@@ -3,10 +3,10 @@ uid nslcd
 gid nslcd
 
 # The location at which the LDAP server(s) should be reachable.
-uri <%= @config_params['uri'] %><%= @config_params['server'] %>
+uri <%= @settings['server'] %>
 
 # The search base that will be used for all queries.
-base <%= @config_params['domain'] %>
+base <%= @settings['domain'] %>
 
 # The LDAP protocol version to use.
 #ldap_version 3

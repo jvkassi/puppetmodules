@@ -3,7 +3,7 @@
 <VirtualHost <%= @settings['ipaddress'] %> >
 
         SFTPEngine On
-        SFTPLog /var/log/proftpd/settings.log
+        SFTPLog /var/log/proftpd/<%= @settings['vhost_name'] %>.log
         
         ServerName <%= @hostname %>
         ServerAdmin <%= @settings['server_admin'] %>

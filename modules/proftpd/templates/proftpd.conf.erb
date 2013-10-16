@@ -4,7 +4,7 @@
 #
 
 # Includes DSO modules
-Include /etc/proftpd/modules.conf
+#Include /etc/proftpd/modules.conf
 
 # Set off to disable IPv6 support which is annoying on IPv4 only boxes.
 # If set on you can experience a longer connection delay in many cases.
@@ -36,10 +36,14 @@ RequireValidShell               off
 TimesGMT off
 
 # Port 21 is the standard FTP port.
+<% if @settings['enable_ftp'] == TRUE %>
 Port                            <%= @settings['port'] %>
+<% else %>
+Port    0
+<% end %>
 
-User                            proftpd
-Group                           nogroup
+User                            <%= @settings['user'] %>
+Group                           <%= @settings['group'] %>
 # Normally, we want files to be overwriteable.
 AllowOverwrite                  on
 
@@ -51,5 +55,10 @@ PathDenyFilter  "(\\.ftpaccess|\\.htaccess|\\.svn)$"
 # Config
 AuthPAM        <%= @settings['pam_authentication'] %>
 DefaultRoot    ~
-Include /etc/proftpd/sftp.d/*
 AuthUserFile /etc/proftpd/ftpd.passwd
+
+<% if @settings['enable_sftp'] == TRUE %>
+LoadModule mod_sftp.c
+LoadModule mod_sftp_pam.c
+Include /etc/proftpd/sftp.d/*
+<% end %>

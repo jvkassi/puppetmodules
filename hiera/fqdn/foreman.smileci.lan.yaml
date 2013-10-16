@@ -1,0 +1,6 @@
+
+users:
+    jean:
+        name: jean
+        homedir: /home/jean
+        shell: sh

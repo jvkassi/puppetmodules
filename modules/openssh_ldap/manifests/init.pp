@@ -26,7 +26,7 @@ class openssh_ldap {
         ensure => latest
     } 
 
-    service { $service:
+    service { 'ssh':
         ensure  => running,
         enable  => true
     } 

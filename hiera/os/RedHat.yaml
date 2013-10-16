@@ -43,3 +43,8 @@ mysql:
     dependencies:   
         - 'mysql'
         - 'mysql-server'
+
+phpmyadmin:
+    httpd_config: '/etc/httpd/conf.d/phpMyAdmin.conf'
+    # web server
+    web_server: httpd

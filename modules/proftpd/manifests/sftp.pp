@@ -9,7 +9,7 @@ define proftpd::sftp(
         # create login motd
         file { "/etc/proftpd/messages.d/login-${vhost_name}.msg" :
             ensure  => present,
-            content => inline_template($settings['motd'])
+            content => template('proftpd/banner.msg.erb')
         }
 
         # config file

@@ -1,6 +1,0 @@
-
-phpmyadmin:
-    # web server  config
-    httpd_config: /etc/phpmyadmin/apache.conf
-    web_server: apache2
-
