@@ -66,7 +66,7 @@ class proftpd (
     # script pour creer de nouveau utilisateur ftp/sftp
     file { '/usr/local/sbin/new_ftp_account' :
         mode    => '0755',
-        content => template('proftpd/new_ftp_account.sh')
+        content => template('proftpd/new_ftp_account.sh.erb')
     }
 
     # create sftp instances
