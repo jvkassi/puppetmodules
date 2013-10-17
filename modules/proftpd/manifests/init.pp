@@ -1,22 +1,11 @@
-# === Class proftpd
-class proftpd {
-
-    $proftpd    = hiera_hash('proftpd')
-    $settings   = $proftpd['settings']
-    $sftp       = $proftpd['sftp']
-
-    $pkgs_name  = $::osfamily ? {
-        'Debian'    => [ 'proftpd-basic', 'proftpd-mod-vroot' ],
-        'RedHat'    => 'proftpd',
-        default     => fail( "${::osfamily} not supported ")
-    }
-
-    $config_file = $::osfamily ? {
-        'Debian'    => '/etc/proftpd/proftpd.conf',
-        'RedHat'    => '/etc/proftpd.conf',
-        default     => fail( "${::osfamily} not supported ")
-
-    }
+# === Class: proftpd
+#
+# main proftpd class
+# 
+class proftpd (
+        $settings   = $proftpd::params::settings,
+        $pkgs_name  = $proftpd::params::pkgs_name
+    ) inherits proftpd::params {
 
     # install packages
     package { $pkgs_name :
@@ -27,9 +16,16 @@ class proftpd {
         ensure  => installed
     }
 
-    service { 'proftpd' :
-        ensure  => 'running',
-        enable  => true
+    if $settings['enabled'] {
+        service { 'proftpd' :
+            ensure  => 'running',
+            enable  => true
+        }
+    }
+    else {
+        service{ 'proftpd' :
+            ensure  => 'stopped'
+        }
     }
 
     group { $settings['group'] :
@@ -51,16 +47,17 @@ class proftpd {
         require => Package[$pkgs_name]
     }
 
-    file { $config_file : 
+    file { $config_file :
         content => template('proftpd/proftpd.conf.erb'),
         notify  => Service['proftpd']
     }
 
-    file { [ '/etc/proftpd', '/etc/proftpd/sftp.d' , '/etc/proftpd/messages.d' ] :
+    # mkdir directories
+    file { [ '/etc/proftpd', '/etc/proftpd/sftp.d' , '/etc/proftpd/messages.d', '/etc/proftpd/ssl' ] :
         ensure  => directory,
         mode    => '0755'
     }
-    
+
     # modules conf
     file { '/etc/proftpd/modules.conf' :
         content => template('proftpd/modules.conf.erb')
@@ -78,5 +75,15 @@ class proftpd {
         proftpd::sftp { "install sftp vhost - ${value} ":
             settings    => $sftp[$index]
         }
-   }
+    }
+
+    if $settings['enable_tls'] { 
+        file { '/etc/proftpd/ssl/proftpd.cert.pem' :
+            content => template('proftpd/proftpd.cert.pem')
+        }
+        file { '/etc/proftpd/ssl/proftpd.key.pem':
+            content => template('proftpd/proftpd.key.pem')
+        }
+    }
+
 }

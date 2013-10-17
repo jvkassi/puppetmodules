@@ -86,42 +86,55 @@ module:
     - "openssh_lpk"
 
 phpmyadmin:
-    servers:
+    settings:   
+        secret: 'uZ|9l1dPVkEYwcmL0xlNYn+wr^@c0_3wG2xDv0urqF%'
+        #acl: 192.168.1.0/24
+        acl: All
+    dbservers:
         admin:
-            secret: 'uZ|9l1dPVkEYwcmL0xlNYn+wr^@c0_3wG2xDv0urqF%'
             auth_type: cookie
             dbuser: pdns
             dbpass: smilecidns
             dbname: pdns
-            dbserver: 10.100.13.21
+            dbip: 10.100.13.21
             dbport: 3306
             dbtype: mysql
-            # Access list
-            #acl: 192.168.1.0/24
-            acl: All
+            AllowRoot: FALSE
+        localhost:
+            auth_type: cookie
+            dbuser: pdns
+            dbpass: smilecidns
+            dbname: pdns
+            dbip: localhost
+            dbport: 3306
+            dbtype: mysql
+            AllowRoot: TRUE
 
 #proftpd common variables
 proftpd:
     settings:
+        # enabled
+        enabled: true
         port: 21
         # pam off or on
         pam_authentication: Off
         motd: "welcome %{::hostname} sftp server "
         server_admin: smile@smile.ci
         timeout_idle: 1200
-        enable_ftp: FALSE
-        enable_sftp: TRUE
+        enable_ftp: true
+        enable_tls: true
+        enable_sftp: true
         user: proftpd
         group: nobody
-        # sftp virtual hosts
+    # sftp virtual hosts
     sftp:
         public:
             motd: "Welcome %{::hostname} sftp server"
             vhost_name: public
-            port: 22
+            port: 23
             ipaddress: 0.0.0.0
             timeout_idle: 1200
-            authentication_methods: password publickey keyboard-interactive
+            authentication_methods: password publickey 
             max_login_attempts: 3
             authorized_keys: file:~/.sftp/authorized_keys
             umask: 066 022

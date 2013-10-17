@@ -9,31 +9,32 @@ $cfg['blowfish_secret'] = "<%= @settings['secret'] %>";
  * Server(s) configuration
  */
 $i = 0;
-<% @servers.each do | server | -%>
+<% @dbservers.each do | index,value | -%>
+<% @settings = @dbservers[index] %>
 $i++;
-$cfg['Servers'][$i]['host']          = "<%= @server['dbserver'] %>"; 
-$cfg['Servers'][$i]['port']          = "<%= @server['dbport'] %>";  
+$cfg['Servers'][$i]['host']          = "<%= @settings['dbip'] %>"; 
+$cfg['Servers'][$i]['port']          = "<%= @settings['dbport'] %>";  
 $cfg['Servers'][$i]['socket']        = '';         
-$cfg['Servers'][$i]['connect_type']  = 'tcp';       // How to connect to MySQL server ('tcp' or 'socket')
+$cfg['Servers'][$i]['connect_type']  = 'tcp';       // How to connect to MySQL settings ('tcp' or 'socket')
 $cfg['Servers'][$i]['extension']     = 'mysqli';    // The php MySQL extension to use ('mysql' or 'mysqli')
 $cfg['Servers'][$i]['compress']      = FALSE;       // Use compressed protocol for the MySQL connection
 $cfg['Servers'][$i]['controluser']   = '';         
 $cfg['Servers'][$i]['controlpass']   = '';          
-$cfg['Servers'][$i]['auth_type']     = "<%= @server['auth_type'] %>";      // Authentication method (config, http or cookie based)?
-$cfg['Servers'][$i]['user']          = "<%= @server['dbuser'] %>";          // MySQL user
-$cfg['Servers'][$i]['password']      = "<%= @server['dbpass'] %>";          // MySQL password (only needed
-$cfg['Servers'][$i]['AllowRoot']     = <%= @server['AllowRoot'] %>;        // whether to allow root login
+$cfg['Servers'][$i]['auth_type']     = "<%= @settings['auth_type'] %>";      // Authentication method (config, http or cookie based)?
+$cfg['Servers'][$i]['user']          = "<%= @settings['dbuser'] %>";          // MySQL user
+$cfg['Servers'][$i]['password']      = "<%= @settings['dbpass'] %>";          // MySQL password (only needed
+$cfg['Servers'][$i]['AllowRoot']     = <%= @settings['AllowRoot'] %>;        // whether to allow root login
 
 <% end -%>
 /*
- * End of servers configuration
+ * End of settingss configuration
  */
 
 /*
- * Directories for saving/loading files from server
+ * Directories for saving/loading files from settings
  */
-$cfg['UploadDir'] = '/var/lib/phpMyAdmin/upload';
-$cfg['SaveDir']   = '/var/lib/phpMyAdmin/save';
+$cfg['SaveDir']   = '/var/lib/<%= @pkg_name %>/save';
+$cfg['UploadDir']   = '/var/lib/<%= @pkg_name %>/upload';
 
 /*
  * Disable the default warning that is displayed on the DB Details Structure

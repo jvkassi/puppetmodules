@@ -4,7 +4,6 @@
 #
 
 # Includes DSO modules
-#Include /etc/proftpd/modules.conf
 
 # Set off to disable IPv6 support which is annoying on IPv4 only boxes.
 # If set on you can experience a longer connection delay in many cases.
@@ -36,7 +35,7 @@ RequireValidShell               off
 TimesGMT off
 
 # Port 21 is the standard FTP port.
-<% if @settings['enable_ftp'] == TRUE %>
+<% if @settings['enable_ftp'] -%> 
 Port                            <%= @settings['port'] %>
 <% else %>
 Port    0
@@ -57,7 +56,21 @@ AuthPAM        <%= @settings['pam_authentication'] %>
 DefaultRoot    ~
 AuthUserFile /etc/proftpd/ftpd.passwd
 
-<% if @settings['enable_sftp'] == TRUE %>
+<% if @settings['enable_tls'] -%>
+<IfModule !mod_tls.c>
+LoadModule mod_tls.c
+</IfModule>
+TLSEngine                  on 
+TLSLog                     /var/log/proftpd/tls.log 
+TLSProtocol                SSLv23 
+TLSOptions                 NoCertRequest 
+TLSRSACertificateFile      /etc/proftpd/ssl/proftpd.cert.pem 
+TLSRSACertificateKeyFile   /etc/proftpd/ssl/proftpd.key.pem 
+TLSVerifyClient            off 
+TLSRequired                on 
+<% end %>
+
+<% if @settings['enable_sftp'] -%>
 LoadModule mod_sftp.c
 LoadModule mod_sftp_pam.c
 Include /etc/proftpd/sftp.d/*
