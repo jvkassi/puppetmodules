@@ -1,53 +1,63 @@
 # Class tomcat
-class tomcat {
+class tomcat (
+        $install_java   = $tomcat::params::install_java,
+        $java_home      = $tomcat::params::java_home,
+        $users          = $tomcat::params::users,
+        $roles          = $tomcat::params::roles
+    ) inherits tomcat::params {
 
-    file { '/usr/local/apache-tomcat-7.0.34.tar.gz/':
+    if $install_java  {
+        class { 'tomcat::java': }
+    }
+
+    file { 'tomcat_tar' :
         ensure  => present,
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0775',
-        source  => 'puppet:///modules/staging/apache-tomcat-7.0.34.tar.gz'
+        path    => '/tmp/apache-tomcat-7.0.34.tar.gz',
+        source  => 'puppet:///modules/tomcat/apache-tomcat-7.0.34.tar.gz'
     }
 
-    exec { 'decompress' :
-        command => 'tar xzf /usr/local/apache-tomcat-7.0.34.tar.gz  && mv apache-tomcat-7.0.2 tomcat ',
-        cwd     => '/usr/local/',
-        path    => ['/usr/bin', '/usr/sbin'],
-        user    => root,
-        require => File['/usr/local/apache-tomcat-7.0.34.tar.gz']
-    }
 
     group { 'tomcat':
         ensure  => present,
-        gid     => 100,
-        require => Exec['detare']
-    }
+    } ->
 
     user { 'tomcat':
         ensure  => present,
-        gid     => 100,
-        home    => '/usr/local/tomcat/',
-        groups  => www-data,
-        require => Group['tomcat']
+        gid     => tomcat,
+        home    => '/usr/share/tomcat',
+    } ->
+
+    exec { 'decompress' :
+        command => 'tar -xzf /tmp/apache-tomcat-7.0.34.tar.gz  -C /usr/share/ --transform s/apache-tomcat-7.0.34/tomcat/ ',
+        path    => ['/bin', '/usr/bin'],
+        user    => tomcat,
+        creates => '/usr/share/tomcat',
+        require => File['tomcat_tar']
     }
 
-    file { '/etc/init.d/tomcat':
-        owner   => 'root',
-        group   => 'root',
-        mode    => '0755',
-        source  => 'puppet:///modules/tomcat/init.d/tomcat',
-        require => Exec['detare']
+    file { '/usr/share/tomcat' :
+        ensure  => directory,
+        owner   => 'tomcat',
+        group   => 'tomcat',
+        recurse => true
+    }
+
+    file { 'tomcat_init.d':
+        path        => '/etc/init.d/tomcat',
+        owner       => 'root',
+        group       => 'root',
+        mode        => '0755',
+        content     => template('tomcat/tomcat.init.erb'),
+        require     => Exec['decompress']
     }
 
     package { 'chkconfig' :
         ensure  => present,
-        require => File['/usr/local/apache-tomcat-7.0.34.tar.gz']
+        require => File['tomcat_tar'],
     }
 
-    exec { 'chkonfig tomcat on ' :
-        cwd     => '/etc/home/',
-        user    => root,
-        require => Package[ 'chkconfig']
+    service { 'tomcat' :
+        ensure  => running,
+        require => File['tomcat_init.d'],
     }
-
 }
