@@ -1,22 +1,19 @@
-# phpMyAdmin
+# Tomcat
 
 ## Requirements / Compatibilty
 
-This module works on Debian. This module needs the mysql::server module to be enabled as well.
-RedHat compatibility is dubious since the mysql module doesn seem to be RedHat compatible.
-
-The phpMyAdmin will store some user-related information ([the pmadb](http://wiki.phpmyadmin.net/pma/Configuration_storage)) in a local database (hence the mysql::server requirement).
-
-## Configuration files : 
-
-The main configuration files imanaged by puppet are : 
-
-**/etc/phpmyadmin/config.inc.php**
-
-**/etc/phpmyadmin/apache.conf**
-
-The information regarding the local database is in : **/etc/phpmyadmin/config-db.php**
-
-This file is not managed by puppet.
+This module works on Linux.
+It will install tomcat and either use your java or install it
+You got to download java xi386 and x64 for this module to install it from java.com
+jdk-7u45-linux-i386.tar.gz and jdk-7u45-linux-x86_64.tar.gz
 
 ## Configuration Hiera
+
+If you want use your own java version set java_home or set install_java
+
+### common.yaml
+
+    tomcat:
+        settings:
+            install_java: yes
+            #java_home: /usr/lib/jvm/java
